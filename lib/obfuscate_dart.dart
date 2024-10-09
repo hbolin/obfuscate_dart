@@ -72,13 +72,13 @@ class ObfuscateDart {
   }
 }
 
-main() {
-  // String projectPath = "/Users/zhangwu/development/workspace/flutter/dy-app-v1/lib";
-  // _obfuscateDart(Directory(projectPath));
-
-  String classPath = "/Users/zhangwu/development/workspace/flutter/dy-app-v1/lib/v2/core/error/core_error.dart";
-  ObfuscateDart.obfuscateMethod(classPath, 2);
-}
+// main() {
+//   String projectPath = "/Users/zhangwu/development/workspace/flutter/dy-app-v1/lib";
+//   _obfuscateDart(Directory(projectPath));
+//
+//   // String classPath = "/Users/zhangwu/development/workspace/flutter/dy-app-v1/lib/v2/core/error/core_error.dart";
+//   // ObfuscateDart.obfuscateMethod(classPath, 2);
+// }
 
 void _obfuscateDart(Directory directory) {
   for (var value in directory.listSync()) {

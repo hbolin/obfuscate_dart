@@ -12,7 +12,13 @@ dependencies:
     sdk: flutter
 
   # https://pub-web.flutter-io.cn/packages/dart_format
-  dart_format: ^1.1.17
+  dart_format: 1.1.17
+
+  # https://pub-web.flutter-io.cn/packages/dio
+  dio: 5.7.0
+
+  # https://pub-web.flutter-io.cn/packages/process_run
+  process_run: 1.1.0
 
 dev_dependencies:
   flutter_test:
