@@ -11,7 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dart_format:
+  # https://pub-web.flutter-io.cn/packages/dart_format
+  dart_format: ^1.1.17
 
 dev_dependencies:
   flutter_test:
