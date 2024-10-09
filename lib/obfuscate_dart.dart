@@ -1,6 +1,7 @@
 library obfuscate_dart;
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/analysis/utilities.dart' as AnalyzerUtilities; // ignore: library_prefixes
@@ -19,7 +20,7 @@ class ObfuscateDart {
     final Formatter formatter = Formatter(configAll);
     final String formattedText = formatter.format(unformattedText);
 
-    print(formattedText);
+    // print(formattedText);
     classFile.writeAsStringSync(formattedText);
   }
 
@@ -30,9 +31,13 @@ class ObfuscateDart {
     }
     final String sWithoutCarriageReturns = s.replaceAll('\r', '');
     final ParseStringResult parseResult = AnalyzerUtilities.parseString(content: sWithoutCarriageReturns, throwIfDiagnostics: false);
-    var rawString = parseResult.unit.toSource();
+    var outString = "";
+    for (var directive in parseResult.unit.directives) {
+      outString += directive.toSource();
+    }
     for (var declaration in parseResult.unit.declarations) {
       if (declaration is ClassDeclarationImpl) {
+        var rawString = declaration.toSource();
         List<String> methodStringList = [];
         for (var value in declaration.members) {
           if (value is MethodDeclarationImpl) {
@@ -55,10 +60,32 @@ class ObfuscateDart {
               resultTemp = swapPosition(resultTemp, methodStringList, i, i + interval);
             }
           }
-          rawString = resultTemp;
+          outString += resultTemp;
+        } else {
+          outString += rawString;
         }
+      } else {
+        outString += declaration.toSource();
       }
     }
-    return rawString;
+    return outString;
+  }
+}
+
+main() {
+  // String projectPath = "/Users/zhangwu/development/workspace/flutter/dy-app-v1/lib";
+  // _obfuscateDart(Directory(projectPath));
+
+  String classPath = "/Users/zhangwu/development/workspace/flutter/dy-app-v1/lib/v2/core/error/core_error.dart";
+  ObfuscateDart.obfuscateMethod(classPath, 2);
+}
+
+void _obfuscateDart(Directory directory) {
+  for (var value in directory.listSync()) {
+    if (FileSystemEntity.isFileSync(value.path) && value.path.endsWith(".dart")) {
+      ObfuscateDart.obfuscateMethod(value.path, Random().nextInt(4) + 1);
+    } else if (FileSystemEntity.isDirectorySync(value.path)) {
+      _obfuscateDart(Directory(value.path));
+    }
   }
 }
