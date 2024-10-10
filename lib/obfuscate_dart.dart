@@ -83,7 +83,7 @@ class ObfuscateDart {
 void _obfuscateDart(Directory directory) {
   for (var value in directory.listSync()) {
     if (FileSystemEntity.isFileSync(value.path) && value.path.endsWith(".dart")) {
-      ObfuscateDart.obfuscateMethod(value.path, Random().nextInt(4) + 1);
+      ObfuscateDart.obfuscateMethod(value.path, Random().nextInt(3) + 1);
     } else if (FileSystemEntity.isDirectorySync(value.path)) {
       _obfuscateDart(Directory(value.path));
     }
