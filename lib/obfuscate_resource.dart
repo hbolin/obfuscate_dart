@@ -25,6 +25,32 @@ class ObfuscateResource {
 
     return obfuscateResourceResultList;
   }
+
+  /// 图片资源dart文件中的图片资源的路径，替换成新的文件路径
+  static void obfuscateImagesConfigDartFile(List<ObfuscateResourceResult> obfuscateResourceResultList, String projectPath, String imagesConfigDartFilePath) {
+    assert(projectPath.isNotEmpty);
+    assert(imagesConfigDartFilePath.isNotEmpty);
+
+    var imagesConfigDartFile = File(imagesConfigDartFilePath);
+    var imagesConfigDartContent = imagesConfigDartFile.readAsStringSync();
+
+    // print(obfuscateResourceResultList.first.oldFile.path.replaceFirst(projectPath.endsWith("/") ? projectPath : "$projectPath/", ""));
+    if (!imagesConfigDartContent
+        .contains(obfuscateResourceResultList.first.oldFile.path.replaceFirst(projectPath.endsWith("/") ? projectPath : "$projectPath/", ""))) {
+      throw "项目路径配置错误，请重新配置：$projectPath";
+    }
+
+    for (var value in obfuscateResourceResultList) {
+      var oldFilePath = value.oldFile.path.replaceFirst(projectPath.endsWith("/") ? projectPath : "$projectPath/", "");
+      var newFilePath = value.newFile.path.replaceFirst(projectPath.endsWith("/") ? projectPath : "$projectPath/", "");
+      if (!imagesConfigDartContent.contains(oldFilePath)) {
+        throw "项目路径配置错误，请重新配置：$projectPath";
+      }
+      imagesConfigDartContent = imagesConfigDartContent.replaceFirst(oldFilePath, newFilePath);
+    }
+
+    imagesConfigDartFile.writeAsStringSync(imagesConfigDartContent);
+  }
 }
 
 class ObfuscateResourceResult {
@@ -40,6 +66,8 @@ class ObfuscateResourceResult {
 main() {
   String projectPath = "/Users/zhangwu/development/workspace/flutter/dy-app-v1";
 
-  List<ObfuscateResourceResult> obfuscateResourceResultList = ObfuscateResource.obfuscateResourceName("$projectPath/assets");
+  List<ObfuscateResourceResult> obfuscateResourceResultList = ObfuscateResource.obfuscateResourceName("$projectPath/assets/images");
   obfuscateResourceResultList.map((e) => "${e.oldFile.path} -> ${e.newFile.path}").toList().forEach(print);
+
+  ObfuscateResource.obfuscateImagesConfigDartFile(obfuscateResourceResultList, projectPath, "$projectPath/lib/v2/config/app_image_asset.dart");
 }
