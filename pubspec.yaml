@@ -20,6 +20,9 @@ dependencies:
   # https://pub-web.flutter-io.cn/packages/process_run
   process_run: 1.1.0
 
+  # https://pub-web.flutter-io.cn/packages/english_words
+  english_words: 4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
